@@ -1,0 +1,19 @@
+# A dry-run rule: NRC evaluates conditions and records what it *would* do in
+# .status.dryRunResults, but never actually taints nodes. Useful for validating
+# a rule before enforcing it. The plugin surfaces these rules too.
+apiVersion: readiness.node.x-k8s.io/v1alpha1
+kind: NodeReadinessRule
+metadata:
+  name: storage-ready-dryrun
+spec:
+  enforcementMode: continuous
+  dryRun: true
+  nodeSelector:
+    matchLabels:
+      storage: local-nvme
+  taint:
+    key: readiness.k8s.io/storage
+    effect: NoExecute
+  conditions:
+    - type: LocalStorageProvisioned
+      requiredStatus: "True"

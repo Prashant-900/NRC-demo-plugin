@@ -1,0 +1,18 @@
+# Gates GPU nodes until the NVIDIA driver DaemonSet reports Ready.
+# The controller keeps the taint on the node while the condition is unmet,
+# so the scheduler won't place GPU workloads there prematurely.
+apiVersion: readiness.node.x-k8s.io/v1alpha1
+kind: NodeReadinessRule
+metadata:
+  name: gpu-driver-ready
+spec:
+  enforcementMode: bootstrap-only
+  nodeSelector:
+    matchLabels:
+      node.kubernetes.io/gpu: "true"
+  taint:
+    key: readiness.k8s.io/gpu-driver
+    effect: NoSchedule
+  conditions:
+    - type: GPUDriverReady
+      requiredStatus: "True"

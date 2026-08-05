@@ -1,0 +1,21 @@
+# Continuously enforces that the CNI / network is ready on every worker node.
+# Because enforcementMode is "continuous", the taint is re-applied if the
+# condition regresses later, not just during bootstrap.
+apiVersion: readiness.node.x-k8s.io/v1alpha1
+kind: NodeReadinessRule
+metadata:
+  name: network-ready
+spec:
+  enforcementMode: continuous
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+  taint:
+    key: readiness.k8s.io/network
+    effect: NoSchedule
+  conditions:
+    - type: NetworkReady
+      requiredStatus: "True"
+    - type: KubeProxyReady
+      requiredStatus: "True"
