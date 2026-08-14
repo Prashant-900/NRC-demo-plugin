@@ -38,5 +38,3 @@ kubectl apply -f examples/
 ```
 
 The rules appear in the sidebar view immediately.
-This is an automated update to the README file.
-This is an automated update to the README file.
