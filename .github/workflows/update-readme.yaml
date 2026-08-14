@@ -3,7 +3,9 @@ name: append README
 on:
   push:
     branches: [main]
-
+permissions:
+  contents: write
+  
 jobs:
   append-readme:
     runs-on: ubuntu-latest
