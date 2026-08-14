@@ -1,0 +1,24 @@
+name: append README
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  append-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Append to README.md
+        run: |
+          echo "This is an automated update to the README file." >> README.md
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md
+          git commit -m "Automated update to README.md"
+          git push origin main
